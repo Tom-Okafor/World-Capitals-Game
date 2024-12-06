@@ -1,0 +1,18 @@
+{
+  "name": "world-capitals",
+  "version": "1.0.0",
+  "description": "World capitals is a game that prompts users to select the accurate Capital of a given country",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Tom Okafor",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  }
+}
