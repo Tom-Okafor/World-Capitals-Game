@@ -10,10 +10,12 @@
     <p>
       Select the capital city that correctly matches the country and flag named.
     </p>
+    <h3 class="score">CURRENT SCORE: <%= score %></h3>
+    <h3 class="alert"><%= alert %></h3>
     <form action="/submit" method="post">
-      <h3><%=country%> <%=FLAG%></h3>
+      <h3><%=country%> <%=flag%></h3>
       <% options.forEach((option) => { %>
-      <input type="submit" value="<%=option%>" />
+      <input type="submit" name="answer" value="<%=option%>" />
 
       <% }) %>
     </form>

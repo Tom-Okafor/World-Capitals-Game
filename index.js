@@ -5,6 +5,7 @@ import pg from "pg";
 const APP = express();
 const PORT = 1510;
 APP.use(express.static("/public"));
+APP.use(express.urlencoded({ extended: true }));
 
 let countriesData;
 let flags;
@@ -32,16 +33,38 @@ try {
   DATABASE.end();
 }
 
+let score = 0;
+let alert = "";
+let randomCountry;
+let capitalCity;
+let shuffledCapitalCities;
+let flag;
+
 APP.get("/", (request, response) => {
-  const RANDOM_COUNTRY = getRandomCountry();
-  const CAPITAL_CITY = getCapitalOfRandomCountry(RANDOM_COUNTRY);
-  const SHUFFLED_CAPITAL_CITIES = shuffleArrayOfRandomCapitals(CAPITAL_CITY);
-  const FLAG = getFlag(RANDOM_COUNTRY);
+  randomCountry = getRandomCountry();
+  capitalCity = getCapitalOfRandomCountry(randomCountry);
+  shuffledCapitalCities = shuffleArrayOfRandomCapitals(capitalCity);
+  flag = getFlag(randomCountry);
+
   response.render("index.ejs", {
-    country: RANDOM_COUNTRY,
-    options: SHUFFLED_CAPITAL_CITIES,
-    FLAG,
+    country: randomCountry,
+    options: shuffledCapitalCities,
+    flag,
+    score,
+    alert,
   });
+});
+
+APP.post("/submit", (request, response) => {
+  const ANSWER = request.body.answer;
+  if (ANSWER === capitalCity) {
+    score++;
+    alert = "CORRECT!!";
+  } else {
+    alert = `Oops! You got that wrong. your score: ${score}`;
+    score = 0;
+  }
+  response.redirect("/");
 });
 
 function getRandomCountry() {
