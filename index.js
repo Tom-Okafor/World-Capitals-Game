@@ -4,7 +4,7 @@ import pg from "pg";
 
 const APP = express();
 const PORT = 1510;
-APP.use(express.static("/public"));
+APP.use(express.static("public"));
 APP.use(express.urlencoded({ extended: true }));
 
 let countriesData;
@@ -64,6 +64,9 @@ APP.post("/submit", (request, response) => {
     alert = `Oops! You got that wrong. your score: ${score}`;
     score = 0;
   }
+  setTimeout(() => {
+    alert = "";
+  }, 500);
   response.redirect("/");
 });
 

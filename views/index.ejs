@@ -3,21 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>WORLD CAPITAL GAME</title>
   </head>
   <body>
-    <h1>world capitals game</h1>
-    <p>
-      Select the capital city that correctly matches the country and flag named.
-    </p>
-    <h3 class="score">CURRENT SCORE: <%= score %></h3>
-    <h3 class="alert"><%= alert %></h3>
-    <form action="/submit" method="post">
+    <main>
+      <h1>world capitals game</h1>
+      <p>
+        Select the capital city that correctly matches the country named below.
+      </p>
+      <h5 class="score">CURRENT SCORE: <%= score %></h5>
       <h3><%=country%> <%=flag%></h3>
-      <% options.forEach((option) => { %>
-      <input type="submit" name="answer" value="<%=option%>" />
 
-      <% }) %>
-    </form>
+      <form action="/submit" method="post">
+        <% options.forEach((option) => { %>
+        <input type="submit" name="answer" value="<%=option%>" />
+
+        <% }) %>
+      </form>
+      <h5 class="alert"><%= alert %></h5>
+    </main>
+    <script src="/script.js"></script>
   </body>
 </html>
