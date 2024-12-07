@@ -33,7 +33,15 @@ try {
 }
 
 APP.get("/", (request, response) => {
-  response.render("index.ejs");
+  const RANDOM_COUNTRY = getRandomCountry();
+  const CAPITAL_CITY = getCapitalOfRandomCountry(RANDOM_COUNTRY);
+  const SHUFFLED_CAPITAL_CITIES = shuffleArrayOfRandomCapitals(CAPITAL_CITY);
+  const FLAG = getFlag(RANDOM_COUNTRY);
+  response.render("index.ejs", {
+    country: RANDOM_COUNTRY,
+    options: SHUFFLED_CAPITAL_CITIES,
+    FLAG,
+  });
 });
 
 function getRandomCountry() {
@@ -49,42 +57,45 @@ function getCapitalOfRandomCountry(randomCountry) {
   return countriesData[INDEX].capital;
 }
 
-function generateArrayOfRandomCapitals() {
-  const RANDOM_ARRAY = [];
+function generateArrayOfRandomCapitals(capital) {
+  let randomArray = [];
   for (let i = 0; i < 2; i++) {
-    RANDOM_ARRAY.push(
-      countriesData[Math.floor(Math.random() * countriesData.length)].capital
-    );
+    const CAPITAL =
+      countriesData[Math.floor(Math.random() * countriesData.length)].capital;
+    if (CAPITAL === "" || CAPITAL === " ") continue;
+    if (randomArray.includes(CAPITAL)) continue;
+
+    randomArray.push(CAPITAL);
   }
-  RANDOM_ARRAY.push(getCapitalOfRandomCountry(getRandomCountry()));
-  return RANDOM_ARRAY;
+  if (randomArray.length < 2) {
+    generateArrayOfRandomCapitals(capital);
+  }
+  randomArray.push(capital);
+  return randomArray;
 }
 
-function shuffleArrayOfRandomCapitals() {
-  const RANDOM_ARRAY = generateArrayOfRandomCapitals();
-  const SHUFFLED_ARRAY = [];
-  function runShuffleLoop(iteration) {
-    for (let i = 0; i < iteration; i++) {
-      const RANDOM_INDEX = Math.floor(Math.random() * RANDOM_ARRAY.length);
-      const NEW_SHUFFLED_ITEM = RANDOM_ARRAY[RANDOM_INDEX];
-      if (SHUFFLED_ARRAY.includes(NEW_SHUFFLED_ITEM)) {
-        continue;
-      } else SHUFFLED_ARRAY.push(NEW_SHUFFLED_ITEM);
-    }
-    if (SHUFFLED_ARRAY.length < RANDOM_ARRAY.length) {
-      let newIteration = RANDOM_ARRAY.length - SHUFFLED_ARRAY.length;
-      runShuffleLoop(newIteration);
+function shuffleArrayOfRandomCapitals(capital) {
+  const RANDOM_CAPITALS = generateArrayOfRandomCapitals(capital);
+  const NUM_OF_CAPITALS = RANDOM_CAPITALS.length;
+  const SHUFFLE_INDEX = [];
+  while (SHUFFLE_INDEX.length < NUM_OF_CAPITALS) {
+    const INDEX = Math.floor(Math.random() * NUM_OF_CAPITALS);
+    if (!SHUFFLE_INDEX.includes(INDEX)) {
+      SHUFFLE_INDEX.push(INDEX);
     }
   }
-  runShuffleLoop(RANDOM_ARRAY.length);
-  return SHUFFLED_ARRAY;
+  const SHUFFLED_CAPITALS = [];
+  for (const INDEX of SHUFFLE_INDEX) {
+    SHUFFLED_CAPITALS.push(RANDOM_CAPITALS[INDEX]);
+  }
+  return SHUFFLED_CAPITALS;
 }
-console.log(shuffleArrayOfRandomCapitals());
-console.log(
-  `Country: ${getRandomCountry()} and capital: ${getCapitalOfRandomCountry(
-    getRandomCountry()
-  )}`
-);
+
+function getFlag(country) {
+  const COUNTRY_INDEX = flags.findIndex((flag) => flag.name === country);
+  const FLAG = flags[COUNTRY_INDEX].flag;
+  return FLAG;
+}
 
 APP.listen(PORT, (err) => {
   if (err) throw err;

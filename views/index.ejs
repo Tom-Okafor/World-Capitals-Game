@@ -11,10 +11,11 @@
       Select the capital city that correctly matches the country and flag named.
     </p>
     <form action="/submit" method="post">
-      <h3>country flag</h3>
-      <input type="submit" value="option[0]" />
-      <input type="submit" value="option[1]" />
-      <input type="submit" value="option[2]" />
+      <h3><%=country%> <%=FLAG%></h3>
+      <% options.forEach((option) => { %>
+      <input type="submit" value="<%=option%>" />
+
+      <% }) %>
     </form>
   </body>
 </html>
