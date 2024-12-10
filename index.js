@@ -11,12 +11,20 @@ let countriesData;
 let flags;
 
 const { Client } = pg;
+// const DATABASE = new Client({
+//   user: "tomokafor",
+//   host: "postgresql://tomokafor:eWFRXj4P4noZSwM7VVeKzuhHEKlz4HwB@dpg-ctbfq19u0jms73f97040-a.oregon-postgres.render.com/world_8tq5",
+//   database: "world_8tq5",
+//   password: "eWFRXj4P4noZSwM7VVeKzuhHEKlz4HwB",
+//   port: 5432,
+// });
+
 const DATABASE = new Client({
-  user: "postgres",
-  host: "localhost",
-  database: "world",
-  password: "51017991",
-  port: 5432,
+  connectionString:
+    "postgresql://tomokafor:eWFRXj4P4noZSwM7VVeKzuhHEKlz4HwB@dpg-ctbfq19u0jms73f97040-a.oregon-postgres.render.com/world_8tq5",
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 await DATABASE.connect();
